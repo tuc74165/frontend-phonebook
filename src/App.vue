@@ -4,25 +4,24 @@
       <img alt="Vue logo" src="./assets/logo.png">
       <h1>Phone Book</h1>
     </div>
-
-    <ContactList msg="Welcome to Your Vue.js App"/>
+    <div>
+      <MainPage />
+    </div>
   </div>
 </template>
 
 <script>
-import ContactList from './views/ContactList.vue'
+import MainPage from './views/MainPage.vue';
 
 export default {
   name: 'App',
   components: {
-    ContactList
+    MainPage
   }
 }
 </script>
 
 <style lang="scss">
-$teal: #77d9e2;
-$red: #f53251;
 body {
   margin: 0px;
 }
