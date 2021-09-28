@@ -21,7 +21,8 @@ export default {
 </script>
 
 <style lang="scss">
-$primaryColor: #77d9e2;
+$teal: #77d9e2;
+$red: #f53251;
 body {
   margin: 0px;
 }
@@ -40,6 +41,9 @@ body {
   img {
     height: 80px;
     width: 80px;
+  }
+  h1 {
+    font-family: "Garamond";
   }
 }
 </style>
