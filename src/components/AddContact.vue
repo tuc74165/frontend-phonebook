@@ -1,54 +1,129 @@
 <template>
   <div class="add-contact-container">
-      <VuePhoneNumberInput
-        v-model="phoneNumber"
-        color="#f53251"
-        valid-color="#00afbf"
-        size="lg"
-        :default-country-code="'US'"
-        :preferred-countries="['US', 'CA']"
-        :countries-height="70"
-        :show-code-on-list="true"
-        :no-example="true"
-        @update="onCountryChange"
+    <div class="name-item">
+      <BaseInput
+        :placeholder="'Enter First Name'"
+        @changeEvent="updateFirstName"
+        :label="'First Name'"
+        :inputId="'FirstName'"
       />
+    </div>
+    <div class="name-item">
+      <BaseInput
+        :placeholder="'Enter Last Name'"
+        @changeEvent="updateLastName"
+        :label="'Last Name'"
+        :inputId="'LastName'"
+      />
+    </div>
+    <VuePhoneNumberInput
+      v-model="phoneNumber"
+      color="#f53251"
+      valid-color="#00afbf"
+      size="lg"
+      :default-country-code="'US'"
+      :preferred-countries="['US', 'CA']"
+      :countries-height="70"
+      :show-code-on-list="true"
+      :no-example="true"
+      @update="onCountryChange"
+    />
+    <span class="info" :class="{ invalid: invalid }"
+      >* All fields are required.</span
+    >
+    <div class="action-group">
+      <button class="button danger-button" @click="cancel()">Cancel</button>
+      <button class="button filled-button" @click="addContact()">Add</button>
+    </div>
   </div>
 </template>
 
 <script>
 import VuePhoneNumberInput from "vue-phone-number-input";
-import RestResource from "../services/contact.service.js";
+import BaseInput from "../components/BaseInput";
 export default {
   name: "AddContact",
   components: {
     VuePhoneNumberInput,
+    BaseInput,
   },
   data() {
     return {
       phoneNumber: null,
-      contacts: null
+      contacts: null,
+      newContact: {},
+      invalid: false,
     };
-  },
-  created: function() {
-    const restResourceService = new RestResource();
-    this.contacts = restResourceService.getList();
   },
   methods: {
     onCountryChange: function(args) {
-      return args.isValid;
-    }
+      if (args.isValid) {
+        this.newContact = {
+          ...this.newContact,
+          Phone: args.phoneNumber,
+          Area: args.countryCallingCode,
+        };
+      }
+    },
+    updateFirstName: function(name) {
+      this.newContact.FirstName = name;
+    },
+    updateLastName: function(name) {
+      this.newContact.LastName = name;
+    },
+    validate: function() {
+      this.invalid =
+        !this.newContact ||
+        Object.keys(this.newContact) == 0 ||
+        !this.newContact.FirstName ||
+        !this.newContact.LastName ||
+        !this.newContact.Phone;
+    },
+    addContact: function() {
+      this.validate();
+      if (!this.invalid) {
+        this.$emit("addContact", this.newContact);
+      }
+    },
+    cancel: function() {
+      this.newContact = null;
+      this.$emit("cancel");
+    },
   },
 };
 </script>
-
 <style scoped lang="scss">
 .add-contact-container {
   display: flex;
   width: 100%;
-  justify-content: space-between;
+  flex-direction: column;
+  margin: 40px;
+  position: relative;
+}
+.name-item {
+  margin-bottom: 10px;
+  width: calc(100% - 80px);
+}
+.info {
+  margin-top: 10px;
+  font-size: 1.3rem;
+  text-align: left;
+  color: #77d9e2;
+  &.invalid {
+    color: #f53251;
+  }
+}
+.action-group {
+  text-align: right;
+  width: calc(100% - 80px);
+}
+.button {
+  font-size: 1.3rem;
+  margin: 0.2rem;
+  width: 10rem;
 }
 .vue-phone-number-input::v-deep {
-  min-width: 50%;
+  width: calc(100% - 80px);
   outline: none !important;
   input {
     box-shadow: none !important;

@@ -1,7 +1,8 @@
 import contacts from './contacts.json'
+
 export default class RestResource {
-    addToList() {
-      // Use vue-resource or any other http library to send your request
+    addToList(newContact) {
+      console.log(JSON.stringify(newContact));
     }
   
     removeFromList() {
