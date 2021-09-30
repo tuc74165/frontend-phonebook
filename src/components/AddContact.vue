@@ -33,7 +33,13 @@
     >
     <div class="action-group">
       <button class="button danger-button" @click="cancel()">Cancel</button>
-      <button class="button filled-button" @click="addContact()">Add</button>
+      <button
+        class="button filled-button"
+        @click="addToList()"
+        id="addContactButton"
+      >
+        Add
+      </button>
     </div>
   </div>
 </template>
@@ -50,7 +56,6 @@ export default {
   data() {
     return {
       phoneNumber: null,
-      contacts: null,
       newContact: {},
       invalid: false,
     };
@@ -71,18 +76,19 @@ export default {
     updateLastName: function(name) {
       this.newContact.LastName = name;
     },
+    //Validate before add new contact to make sure all required fields are filled.
     validate: function() {
       this.invalid =
         !this.newContact ||
-        Object.keys(this.newContact) == 0 ||
+        Object.keys(this.newContact).length == 0 ||
         !this.newContact.FirstName ||
         !this.newContact.LastName ||
         !this.newContact.Phone;
     },
-    addContact: function() {
+    addToList: function() {
       this.validate();
       if (!this.invalid) {
-        this.$emit("addContact", this.newContact);
+        this.$store.commit("addToList", this.newContact);
       }
     },
     cancel: function() {
@@ -95,14 +101,17 @@ export default {
 <style scoped lang="scss">
 .add-contact-container {
   display: flex;
-  width: 100%;
   flex-direction: column;
   margin: 40px;
   position: relative;
+  background: #77d9e2;
+  border-radius: 5px;
+  padding: 30px;
+  min-width: 400px;
 }
 .name-item {
   margin-bottom: 10px;
-  width: calc(100% - 80px);
+  width: 100%;
 }
 .info {
   margin-top: 10px;
@@ -115,7 +124,7 @@ export default {
 }
 .action-group {
   text-align: right;
-  width: calc(100% - 80px);
+  width: 100%;
 }
 .button {
   font-size: 1.3rem;
@@ -123,7 +132,7 @@ export default {
   width: 10rem;
 }
 .vue-phone-number-input::v-deep {
-  width: calc(100% - 80px);
+  width: 100%;
   outline: none !important;
   input {
     box-shadow: none !important;

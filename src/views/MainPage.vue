@@ -9,20 +9,16 @@
       ></BaseInput>
       <button
         class="button filled-button add-contact-button"
-        @click="showAdd()"
+        @click="showAddContact = true"
       >
         Add Contact
       </button>
     </div>
-    <div v-if="showAddContact">
-      <AddContact
-        ref="AddContactComp"
-        @cancel="cancelAdd"
-        @addContact="addToList"
-      />
+    <div v-if="showAddContact" style="width:100%;">
+      <AddContact @cancel="cancelAdd" />
     </div>
     <div>
-      <ContactList ref="ContactListComp" :searchName="searchName" />
+      <ContactList :searchName="searchName" />
     </div>
   </div>
 </template>
@@ -45,20 +41,11 @@ export default {
     };
   },
   methods: {
-    showAdd: function() {
-      this.showAddContact = true;
-      if (this.$refs.AddContactComp) {
-        this.$refs.AddContactComp.newContact = {};
-      }
-    },
     filterContacts: function(searchName) {
       this.searchName = searchName;
     },
     cancelAdd: function() {
       this.showAddContact = false;
-    },
-    addToList: function(newContact) {
-      this.$refs.ContactListComp.addToList(newContact);
     },
   },
 };
@@ -73,7 +60,7 @@ h1 {
   flex-direction: row;
   justify-content: space-between;
   padding: 20px;
-  min-width: 789px;
+  min-width: 769px;
   .search-input {
     max-width: 50%;
   }

@@ -48,5 +48,10 @@ npm run build
 npm run lint
 ```
 
+### run unit test
+```
+npm run test
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
